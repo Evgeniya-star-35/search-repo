@@ -24,6 +24,7 @@ const gitRepoHandlerSubmit = (e) => {
   axios.get(`https://api.github.com/search/repositories?q=${value}&client_id=67684cabc84f94f0938e&client_secret=782ea639550c1b5d986bdd8129813652ed04c92c&page=${currentPage}`)
       .then(result => {
         //   console.log(result.data.items);
+          clearContainer();
           loadMoreBtn.disable();
           loadMoreBtn.show();
           renderGitRepositories(result.data.items);
@@ -42,16 +43,31 @@ function createGitRepo ({clone_url,name}) {
 refs.container.insertAdjacentHTML('beforeend', link)
 }
 
-// function renderCollection (arr) {
-//   arr.forEach(el => createItem(el))
-// }
+
 
 function renderGitRepositories(arr) {
     arr.forEach(el => createGitRepo(el));
 }
 
+function clearContainer () {
+    refs.container.innerHTML = "";
+}
+function scrollPage() {
+  try {
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 1000);
+    renderGitRepositories();
+  } catch (error) {
+    console.log(error);
+  }
+}
 refs.form.addEventListener('submit', gitRepoHandlerSubmit);
-loadMoreBtn.refs.button.addEventListener('click', gitRepoHandlerSubmit);
+loadMoreBtn.refs.button.addEventListener('click', scrollPage);
 
 
 
