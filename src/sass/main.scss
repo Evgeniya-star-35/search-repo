@@ -1,0 +1,106 @@
+/*
+ * Главный файл стилей.
+ * Все паршалы подключаются сюда.
+ */
+
+// Стили для файла с примером HTML-фрагмента
+@import './example';
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #000;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  background-color: rgb(20, 238, 238); 
+  // background-image: url(../images/line.jpg);
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // background-position: 50% 50%;
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.search-form {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.input {
+  width: 280px;
+  height: 60px;
+  outline: transparent;
+  border-radius: 20px;
+  border: 5px solid rgb(240, 138, 155);
+}
+.input:focus-within {
+  border: 5px solid rgb(20, 195, 20);
+}
+.btn {
+  display: block;
+  margin: 40px auto;
+  padding: 5px;
+  cursor: pointer;
+  width: 150px;
+  height: 50px;
+  border: 3px solid rgb(230, 126, 216);
+  border-radius: 20px;
+  background-color: rgb(226, 146, 193);
+}
+.btn:hover,
+.btn:focus {
+  background-color: rgb(91, 200, 109);
+  border: 3px solid rgb(49, 155, 39);
+}
+.button.is-hidden {
+  display: none;
+}
+
+.button > .spinner.is-hidden {
+  display: none;
+}
+.text {
+  color: rgb(12, 228, 228);
+  font-weight: bold;
+  font-size: 15px;
+}
+.text:focus,
+.text:hover {
+  color: rgb(18, 18, 224);
+}
+.search {
+  display: inline-block;
+  width: 100px;
+  height: 50px;
+  padding: 5px 10px;
+  margin-left: 20px;
+  font-weight: bold;
+  font-weight: 18px;
+  color: #fff;
+  background-color: rgb(236, 126, 126);
+  border-radius: 5px;
+}
+.search:focus,
+.search:hover {
+  color: rgb(14, 26, 194);
+  background-color: rgb(208, 221, 24);
+}
+.container {
+    display: grid;
+    grid-template-columns: 300px 300px 300px 300px 300px;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+    margin-left: 60px;
+    
+}
