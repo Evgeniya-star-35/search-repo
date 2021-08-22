@@ -7,7 +7,7 @@ export default class NewsApiService {
 
   fetchRepo() {
     return fetch(
-      `https://api.github.com/search/repositories?q=${this.searchQuery}&client_id=67684cabc84f94f0938e&client_secret=782ea639550c1b5d986bdd8129813652ed04c92c&page=${this.page}`,
+      `https://api.github.com/search/repositories?q=${this.searchQuery}&client_id=e0c77ca7c442cc73bbe5&client_secret=5a39b9e9784cf934a97e8bd0e8b98fb9d90c7280&page=${this.page}`,
     )
       .then(response => response.json())
       .then(({ items }) => {
