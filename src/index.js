@@ -1,56 +1,90 @@
 import './sass/main.scss';
-import axios from 'axios';
+import { notice } from '@pnotify/core';
+import { error } from '@pnotify/core';
+import '@pnotify/core/dist/BrightTheme.css';
+import '@pnotify/core/dist/PNotify.css';
+import NewsApiService from './js/fetchApi';
 import LoadMoreBtn from './js/loadMoreBtn';
 const refs = {
   form: document.querySelector('#search-form'),
   input: document.querySelector('.input'),
   container: document.querySelector('.container'),
-//   more: document.querySelector('[data-action="load-more"]')
-}
+  //   more: document.querySelector('[data-action="load-more"]')
+};
 
+const newsApiService = new NewsApiService();
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
   hidden: true,
 });
 
-let currentPage = 1
+const gitRepoHandlerSubmit = e => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  newsApiService.query = form.elements.query.value;
 
+  if (newsApiService.query === '') {
+    loadMoreBtn.hide();
+    error({
+      text: 'Please enter something!',
+      delay: 2000,
+    });
+  }
+  clearContainer();
+  fetchLink();
+  loadMoreBtn.show();
+  newsApiService.resetPage();
+  form.reset();
+};
 
-
-const gitRepoHandlerSubmit = (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-  const value = refs.input.value;
-  axios.get(`https://api.github.com/search/repositories?q=${value}&client_id=67684cabc84f94f0938e&client_secret=782ea639550c1b5d986bdd8129813652ed04c92c&page=${currentPage}`)
-      .then(result => {
-        //   console.log(result.data.items);
-          clearContainer();
-          loadMoreBtn.disable();
-          loadMoreBtn.show();
-          renderGitRepositories(result.data.items);
-          form.reset();
-          loadMoreBtn.enable();
-      })
-  .then(() => currentPage++)
-  .catch((err) => console.log(err))
-}
-
-function createGitRepo ({clone_url,name}) {
-    const link = `<a href ='${clone_url}' target="blank">
+function createGitRepo({ clone_url, name }) {
+  const link = `<a href ='${clone_url}' target="blank">
     <p>${name}</p>
   </a>
-`
-refs.container.insertAdjacentHTML('beforeend', link)
+`;
+  refs.container.insertAdjacentHTML('beforeend', link);
 }
-
-
 
 function renderGitRepositories(arr) {
-    arr.forEach(el => createGitRepo(el));
+  arr.forEach(el => createGitRepo(el));
 }
 
-function clearContainer () {
-    refs.container.innerHTML = "";
+function clearContainer() {
+  refs.container.innerHTML = '';
+}
+function fetchLink() {
+  loadMoreBtn.disable();
+
+  newsApiService
+    .fetchRepo()
+    .then(items => {
+      renderGitRepositories(items);
+
+      loadMoreBtn.enable();
+
+      if (hits.length === 0) {
+        loadMoreBtn.hide();
+        noFound();
+      }
+      onNotice();
+    })
+    .catch(onError);
+}
+function noFound() {
+  error({
+    text: 'No matches found. Please enter another query!',
+    delay: 2500,
+  });
+}
+
+function onNotice() {
+  notice({
+    title: `Loading... Please wait!`,
+    delay: 500,
+  });
+}
+function onError(Error) {
+  Error;
 }
 function scrollPage() {
   try {
@@ -61,25 +95,10 @@ function scrollPage() {
         behavior: 'smooth',
       });
     }, 1000);
-    renderGitRepositories();
+    fetchLink();
   } catch (error) {
     console.log(error);
   }
 }
 refs.form.addEventListener('submit', gitRepoHandlerSubmit);
 loadMoreBtn.refs.button.addEventListener('click', scrollPage);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
