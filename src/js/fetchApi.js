@@ -12,7 +12,7 @@ export default class NewsApiService {
       .then(response => response.json())
       .then(({ items }) => {
         this.incrementPage();
-        console.log(items);
+        // console.log(items);
         return items;
       });
   }
